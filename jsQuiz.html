@@ -28,6 +28,7 @@
 			{
 				document.getElementById("c0b").checked = true;
 			}
+
 			
 			
 		}
@@ -37,13 +38,22 @@
 			currentQuestionNum++;
 			if (currentQuestionNum == questions.length)
 			{
+				currentQuestionNum--;
 				finishQuiz();
 				return;
 			}
 			else
 			{
-				loadQuestion();
+				animateToNewQuestion();
 			}
+		}
+
+		function animateToNewQuestion()
+		{
+			$(".quizText").fadeOut(200);
+			setTimeout(function(){
+				loadQuestion();
+				$(".quizText").fadeIn(10);}, 200);
 		}
 		function showPreviousQuestion()
 		{
@@ -54,7 +64,7 @@
 			else
 			{
 				currentQuestionNum--;
-				loadQuestion();
+				animateToNewQuestion();
 			}
 		}
 
@@ -128,11 +138,11 @@
 				<input type="button" id="userSubmit" value="Begin Quiz" onclick="startQuiz()"/>
 			</form>
 			<form id="quiz" style="display:none">
-				<label id="theQuestion">The Question</label><br />
-				<input type="radio" name="answerChoice" value="0" id="c0b"/><label id="c0"></label><br />
-				<input type="radio" name="answerChoice" value="1" id="c1b"/><label id="c1"></label><br />
-				<input type="radio" name="answerChoice" value="2" id="c2b"/><label id="c2"></label><br />
-				<input type="radio" name="answerChoice" value="3" id="c3b"/><label id="c3"></label><br />
+				<label id="theQuestion" class="quizText">The Question</label><br />
+				<input type="radio" name="answerChoice" value="0" id="c0b"/><label id="c0" class="quizText"></label><br />
+				<input type="radio" name="answerChoice" value="1" id="c1b"/><label id="c1" class="quizText"></label><br />
+				<input type="radio" name="answerChoice" value="2" id="c2b"/><label id="c2" class="quizText"></label><br />
+				<input type="radio" name="answerChoice" value="3" id="c3b"/><label id="c3" class="quizText"></label><br />
 				<input type="button" value="previous" onclick="showPreviousQuestion()"/>
 				<input type="button" value="next" onclick="nextQuestion()"/>
 			</form>
