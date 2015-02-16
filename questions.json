@@ -1,0 +1,30 @@
+{
+	"theQuestions":
+	[
+	{
+	"question":"What is the capital of Illinois?",
+	"choices":["Chicago","Naperville","Springfield","Cairo"],
+	"correctAnswer":2
+	},
+	{
+	"question":"Where does coffee come from?",
+	"choices":["A nut","A vegetable","Seed of a fruit","A root"],
+	"correctAnswer":2
+	},
+	{
+	"question":"Which is the densest form of water?",
+	"choices":["Liquid","Solid","Gas","None of the above"],
+	"correctAnswer":0
+	},
+	{
+	"question":"Who was the original guitarist for Pink Floyd?",
+	"choices":["Roger Waters","Syd Barrett","David Gilmore","Nick Mason"],
+	"correctAnswer":1
+	},
+	{
+	"question":"Which is not a vegetable?",
+	"choices":["Carrot","Onion","Squash","Tomato"],
+	"correctAnswer":3
+	}
+	]
+}

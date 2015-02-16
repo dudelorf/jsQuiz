@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>JavaScript Quiz</title>
+	<script type="text/javascript" src="jquery-1.11.2.js"></script>
+	<script type="text/JavaScript">
+		var questions;
+		//initialize answers array
+		var answers;
+		var currentQuestionNum;
+		var theCorrectAnswer;
+
+		function loadQuestion()
+		{
+			var newQuestion = questions[currentQuestionNum];
+			theCorrectAnswer = newQuestion.correctAnswer;
+			document.getElementById("theQuestion").innerHTML = newQuestion.question;
+			document.getElementById("c0").innerHTML = newQuestion.choices[0];
+			document.getElementById("c1").innerHTML = newQuestion.choices[1];
+			document.getElementById("c2").innerHTML = newQuestion.choices[2];
+			document.getElementById("c3").innerHTML = newQuestion.choices[3];
+			if(answers[currentQuestionNum] != -1)
+			{
+				var oldChoiceStr = ("c" + answers[currentQuestionNum] + "b");
+				document.getElementById(oldChoiceStr).checked = true;
+			}
+			else
+			{
+				document.getElementById("c0b").checked = true;
+			}
+			
+			
+		}
+		function nextQuestion()
+		{
+			processAnswer(); 
+			currentQuestionNum++;
+			if (currentQuestionNum == questions.length)
+			{
+				finishQuiz();
+				return;
+			}
+			else
+			{
+				loadQuestion();
+			}
+		}
+		function showPreviousQuestion()
+		{
+			if(currentQuestionNum == 0)
+			{
+				alert("No dice, this is the first question.")
+			}
+			else
+			{
+				currentQuestionNum--;
+				loadQuestion();
+			}
+		}
+
+		function processAnswer()
+		{
+			var answerOptions = document.getElementById("quiz");
+			for (var c = 0; c < 4; c++)
+			{
+				if (answerOptions[c].checked)
+				{
+					answers[currentQuestionNum] = answerOptions[c].value;
+					return;
+				}
+			}
+		}
+
+		function finishQuiz()
+		{
+			var score = 0;
+			for (var q = 0; q < questions.length; q++)
+			{
+				if (questions[q].correctAnswer == answers[q])
+				{
+					score++;
+				}
+			}
+			alert("Your score is " + score);
+		}
+
+		function startQuiz()
+		{
+			document.getElementById("loginForm").style.display = "none";
+			document.getElementById("quiz").style.display = "";
+		}
+		function getJsonText()
+		{
+			var xmlhttp = new XMLHttpRequest();
+			xmlhttp.open("GET", "questions.json", false);
+			xmlhttp.send();
+			var theText = xmlhttp.responseText;
+			return theText;
+		}
+		function importQuestions()
+		{
+			var jsonText = JSON.parse(getJsonText());
+			return jsonText;
+		}
+		function window_onload()
+		{
+			var jsonObject = importQuestions();
+			questions = jsonObject.theQuestions;
+			//initialize answers array
+			answers = new Array();
+			for (var i = 0; i < questions.length; i++)
+			{
+				answers[i] = -1;
+			}
+			currentQuestionNum = 0;
+			loadQuestion();
+			
+		}
+		
+	</script>
+</head>
+<body onload="window_onload()">
+	<div id="outerFrame">
+		<div id="innerFrame">
+			<form id="loginForm">
+				<label id="welcomeText">Welcome to the Quiz<br />Please enter your information</label><br />
+				<label>User Name: <input type="text" id="userName" /></label><br />
+				<input type="button" id="userSubmit" value="Begin Quiz" onclick="startQuiz()"/>
+			</form>
+			<form id="quiz" style="display:none">
+				<label id="theQuestion">The Question</label><br />
+				<input type="radio" name="answerChoice" value="0" id="c0b"/><label id="c0"></label><br />
+				<input type="radio" name="answerChoice" value="1" id="c1b"/><label id="c1"></label><br />
+				<input type="radio" name="answerChoice" value="2" id="c2b"/><label id="c2"></label><br />
+				<input type="radio" name="answerChoice" value="3" id="c3b"/><label id="c3"></label><br />
+				<input type="button" value="previous" onclick="showPreviousQuestion()"/>
+				<input type="button" value="next" onclick="nextQuestion()"/>
+			</form>
+		</div>
+	</div>
+</body>
+</html>
