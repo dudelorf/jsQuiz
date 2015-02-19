@@ -27,11 +27,9 @@
 			else
 			{
 				document.getElementById("c0b").checked = true;
-			}
-
-			
-			
+			}		
 		}
+
 		function nextQuestion()
 		{
 			processAnswer(); 
@@ -55,6 +53,7 @@
 				loadQuestion();
 				$(".quizText").fadeIn(10);}, 200);
 		}
+
 		function showPreviousQuestion()
 		{
 			if(currentQuestionNum == 0)
@@ -96,9 +95,19 @@
 
 		function startQuiz()
 		{
-			document.getElementById("loginForm").style.display = "none";
-			document.getElementById("quiz").style.display = "";
+			if (document.getElementById("userName").value == "")
+			{
+				alert("Hey, input a name!");
+			}
+			else
+			{
+				document.getElementById("loginForm").style.display = "none";
+				var theUser = document.getElementById("userName").value;
+				document.getElementById("userInfo").innerHTML = "Welcome " + theUser;
+				document.getElementById("quiz").style.display = "";
+			}
 		}
+
 		function getJsonText()
 		{
 			var xmlhttp = new XMLHttpRequest();
@@ -114,6 +123,14 @@
 		}
 		function window_onload()
 		{
+			$("#userName").keypress(function(event) {
+				if (event.which == 13)
+				{
+					event.preventDefault();
+					startQuiz();
+				}
+				});
+			//imports questions from json file
 			var jsonObject = importQuestions();
 			questions = jsonObject.theQuestions;
 			//initialize answers array
@@ -137,7 +154,10 @@
 				<label>User Name: <input type="text" id="userName" /></label><br />
 				<input type="button" id="userSubmit" value="Begin Quiz" onclick="startQuiz()"/>
 			</form>
+
 			<form id="quiz" style="display:none">
+				<p id="userInfo"></p>
+				<p id="timer"></p>
 				<label id="theQuestion" class="quizText">The Question</label><br />
 				<input type="radio" name="answerChoice" value="0" id="c0b"/><label id="c0" class="quizText"></label><br />
 				<input type="radio" name="answerChoice" value="1" id="c1b"/><label id="c1" class="quizText"></label><br />
