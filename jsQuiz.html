@@ -95,6 +95,7 @@
 
 		function startQuiz()
 		{
+
 			if (document.getElementById("userName").value == "")
 			{
 				alert("Hey, input a name!");
@@ -141,12 +142,18 @@
 			}
 			currentQuestionNum = 0;
 			loadQuestion();
-			
+			//attempt to load cookie
+			//if exists load cookie info into user object and begin quiz
+			//else open up user info form
+		}
+		function window_onunload()
+		{
+			alert("goodbye");
 		}
 		
 	</script>
 </head>
-<body onload="window_onload()">
+<body onload="window_onload()" onunload="window_onunload()">
 	<div id="outerFrame">
 		<div id="innerFrame">
 			<form id="loginForm">
@@ -158,6 +165,7 @@
 			<form id="quiz" style="display:none">
 				<p id="userInfo"></p>
 				<p id="timer"></p>
+				<input type="button" value="Leave Quiz"><br />
 				<label id="theQuestion" class="quizText">The Question</label><br />
 				<input type="radio" name="answerChoice" value="0" id="c0b"/><label id="c0" class="quizText"></label><br />
 				<input type="radio" name="answerChoice" value="1" id="c1b"/><label id="c1" class="quizText"></label><br />
