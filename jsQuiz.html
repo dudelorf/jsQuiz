@@ -5,11 +5,16 @@
 	<script type="text/javascript" src="jquery-1.11.2.js"></script>
 	<script type="text/javascript" src="CookieFunctions.js"></script>
 	<script type="text/JavaScript">
+		//array of questions for current quiz
 		var questions;
-		//initialize answers array
+		//array of answers
 		var answers;
+		//index of currently displayed question
 		var currentQuestionNum;
+		//correct answer for current question
 		var theCorrectAnswer;
+		//active user for quiz
+		var currentUser;
 
 		function loadQuestion()
 		{
@@ -67,6 +72,10 @@
 				animateToNewQuestion();
 			}
 		}
+		function saveAndQuit_onclick()
+		{
+			setCookie("userName", currentUser);
+		}
 
 		function processAnswer()
 		{
@@ -93,21 +102,28 @@
 			}
 			alert("Your score is " + score);
 		}
-
-		function startQuiz()
+		function newUserQuiz()
+		//initializes a new user and begins quiz
 		{
-
-			if (document.getElementById("userName").value == "")
+			var textInput = document.getElementById("userNameInput").value;
+			if (textInput == "" || textInput == null)
 			{
 				alert("Hey, input a name!");
 			}
 			else
 			{
-				document.getElementById("loginForm").style.display = "none";
-				var theUser = document.getElementById("userName").value;
-				document.getElementById("userInfo").innerHTML = "Welcome " + theUser;
-				document.getElementById("quiz").style.display = "";
+				currentUser = document.getElementById("userNameInput").value;
+				document.getElementById("userInfo").innerHTML = "Welcome " + currentUser;
+				startQuiz();
 			}
+		}
+
+		function startQuiz()
+		//begins quiz
+		{
+			document.getElementById("loginForm").style.display = "none";
+			document.getElementById("quizContainer").style.display = "";
+			loadQuestion();
 		}
 
 		function getJsonText()
@@ -142,10 +158,13 @@
 				answers[i] = -1;
 			}
 			currentQuestionNum = 0;
-			loadQuestion();
 			//attempt to load cookie
-			//if exists load cookie info into user object and begin quiz
-			//else open up user info form
+			currentUser = getCookieValue("userName");
+			if (currentUser != null)
+			{
+				document.getElementById("userInfo").innerHTML = ("Welcome back " + currentUser);
+				startQuiz();
+			}
 		}
 
 	</script>
@@ -154,18 +173,19 @@
 	<div id="container">
 		<form id="loginForm">
 			<label id="welcomeText">Welcome to the Quiz<br />Please enter your information</label><br />
-			<label>User Name: <input type="text" id="userName" /></label><br />
-			<input type="button" id="userSubmit" value="Begin Quiz" onclick="startQuiz()"/>
+			<label>User Name: <input type="text" id="userNameInput" /></label><br />
+			<input type="button" id="userSubmit" value="Begin Quiz" onclick="newUserQuiz()"/>
 		</form>
-		<div id="quizContainer">
+		<div id="quizContainer" style="display:none">
 			<div id="infoSection">
 				<p id="userInfo"></p>
+				<input type="button" name="saveAndQuit" id="saveAndQuit" value="Save and Quit" onclick="saveAndQuit_onclick()" />
 				<!--Placeholder for quiz info (user, timer, etc...)-->
 			</div>
 			<nav>
 				<!--Placeholder for multiple quiz options-->
 			</nav>
-			<form id="quiz" style="display:none">
+			<form id="quiz">
 				<label id="theQuestion" class="quizText">The Question</label><br />
 				<input type="radio" name="answerChoice" value="0" id="c0b"/><label id="c0" class="quizText"></label><br />
 				<input type="radio" name="answerChoice" value="1" id="c1b"/><label id="c1" class="quizText"></label><br />
