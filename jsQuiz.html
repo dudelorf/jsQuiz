@@ -3,6 +3,7 @@
 <head>
 	<title>JavaScript Quiz</title>
 	<script type="text/javascript" src="jquery-1.11.2.js"></script>
+	<script type="text/javascript" src="CookieFunctions.js"></script>
 	<script type="text/JavaScript">
 		var questions;
 		//initialize answers array
@@ -146,26 +147,25 @@
 			//if exists load cookie info into user object and begin quiz
 			//else open up user info form
 		}
-		function window_onunload()
-		{
-			alert("goodbye");
-		}
-		
+
 	</script>
 </head>
-<body onload="window_onload()" onunload="window_onunload()">
-	<div id="outerFrame">
-		<div id="innerFrame">
-			<form id="loginForm">
-				<label id="welcomeText">Welcome to the Quiz<br />Please enter your information</label><br />
-				<label>User Name: <input type="text" id="userName" /></label><br />
-				<input type="button" id="userSubmit" value="Begin Quiz" onclick="startQuiz()"/>
-			</form>
-
-			<form id="quiz" style="display:none">
+<body onload="window_onload()">
+	<div id="container">
+		<form id="loginForm">
+			<label id="welcomeText">Welcome to the Quiz<br />Please enter your information</label><br />
+			<label>User Name: <input type="text" id="userName" /></label><br />
+			<input type="button" id="userSubmit" value="Begin Quiz" onclick="startQuiz()"/>
+		</form>
+		<div id="quizContainer">
+			<div id="infoSection">
 				<p id="userInfo"></p>
-				<p id="timer"></p>
-				<input type="button" value="Leave Quiz"><br />
+				<!--Placeholder for quiz info (user, timer, etc...)-->
+			</div>
+			<nav>
+				<!--Placeholder for multiple quiz options-->
+			</nav>
+			<form id="quiz" style="display:none">
 				<label id="theQuestion" class="quizText">The Question</label><br />
 				<input type="radio" name="answerChoice" value="0" id="c0b"/><label id="c0" class="quizText"></label><br />
 				<input type="radio" name="answerChoice" value="1" id="c1b"/><label id="c1" class="quizText"></label><br />
