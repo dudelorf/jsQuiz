@@ -2,8 +2,9 @@
 <html>
 <head>
 	<title>JavaScript Quiz</title>
+	<link rel="stylesheet" type="text/css" href="stylesheet.css" />
 	<script type="text/javascript" src="jquery-1.11.2.js"></script>
-	<script type="text/javascript" src="CookieFunctions.js"></script>
+	<script type="text/javascript" src="jqueryCookie.js"></script>
 	<script type="text/JavaScript">
 		//array of questions for current quiz
 		var questions;
@@ -74,8 +75,8 @@
 		}
 		function saveAndQuit_onclick()
 		{
-			setCookie("userName", currentUser);
-			setCookie("answers", answers);
+			$.cookie("userName", currentUser, { expires: 7 });
+			$.cookie("answers", answers, { expires: 7 });
 		}
 
 		function processAnswer()
@@ -160,10 +161,11 @@
 			}
 			currentQuestionNum = 0;
 			//attempt to load cookie
-			currentUser = getCookieValue("userName");
-			if (currentUser != null)
+			currentUser = $.cookie("userName");
+			if (currentUser != undefined)
 			{
-				answers = getCookieValue("answers").split(",");
+				//loads answers
+				answers = $.cookie("answers").split(",");
 				for(var a = 0; a < answers.length; a++)
 				{
 					if (answers[a] == -1)
@@ -176,13 +178,13 @@
 				startQuiz();
 			}
 		}
-
 	</script>
 </head>
 <body onload="window_onload()">
 	<div id="container">
 		<form id="loginForm">
-			<label id="welcomeText">Welcome to the Quiz<br />Please enter your information</label><br />
+			<p>Welcome to the Quiz</p>
+			<p>Please enter your information</p>
 			<label>User Name: <input type="text" id="userNameInput" /></label><br />
 			<input type="button" id="userSubmit" value="Begin Quiz" onclick="newUserQuiz()"/>
 		</form>
