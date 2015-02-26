@@ -75,6 +75,7 @@
 		function saveAndQuit_onclick()
 		{
 			setCookie("userName", currentUser);
+			setCookie("answers", answers);
 		}
 
 		function processAnswer()
@@ -162,6 +163,15 @@
 			currentUser = getCookieValue("userName");
 			if (currentUser != null)
 			{
+				answers = getCookieValue("answers").split(",");
+				for(var a = 0; a < answers.length; a++)
+				{
+					if (answers[a] == -1)
+					{
+						currentQuestionNum = (a);
+						break;
+					}
+				}
 				document.getElementById("userInfo").innerHTML = ("Welcome back " + currentUser);
 				startQuiz();
 			}
