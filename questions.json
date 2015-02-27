@@ -1,5 +1,5 @@
 {
-	"theQuestions":
+	"quiz0":
 	[
 	{
 	"question":"What is the capital of Illinois?",
@@ -26,5 +26,19 @@
 	"choices":["Carrot","Onion","Squash","Tomato"],
 	"correctAnswer":3
 	}
+	],
+	"quiz1":
+	[
+	{
+		"question": "What plant does tea come from?",
+		"choices": ["papaya", "Camelia Sensesi", "Coffea Robusta", "Potato"],
+		"correctAnswer": 1
+	},
+	{
+		"question": "What car company makes the corvette?",
+		"choices": ["Chevy", "Dodge", "Nissan", "BMW"],
+		"correctAnswer": 0
+	}
 	]
+
 }

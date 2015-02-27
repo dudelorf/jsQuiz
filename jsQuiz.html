@@ -6,6 +6,8 @@
 	<script type="text/javascript" src="jquery-1.11.2.js"></script>
 	<script type="text/javascript" src="jqueryCookie.js"></script>
 	<script type="text/JavaScript">
+		//object containing multiple quizzes
+		var quizzes;
 		//array of questions for current quiz
 		var questions;
 		//array of answers
@@ -107,25 +109,48 @@
 		function newUserQuiz()
 		//initializes a new user and begins quiz
 		{
+			//Requires input for user name
 			var textInput = document.getElementById("userNameInput").value;
 			if (textInput == "" || textInput == null)
 			{
 				alert("Hey, input a name!");
 			}
 			else
+			//initalize user and begin quiz
 			{
 				currentUser = document.getElementById("userNameInput").value;
 				document.getElementById("userInfo").innerHTML = "Welcome " + currentUser;
-				startQuiz();
+				openQuiz();
 			}
+		}
+
+		function openQuiz()
+		{
+			document.getElementById("loginForm").style.display = "none";
+			document.getElementById("quizContainer").style.display = "";
+			document.getElementById("quiz").style.display = "none";
+		}
+
+		function loadQuiz(quizNum)
+		{
+			var quizStr = "quiz" + quizNum;
+			questions = quizzes[quizStr];
+			//load array
+			//if array exists load it, otherwise create new array
+			answers = new Array();
+			for (var a = 0; a < questions.length; a++)
+			{
+				answers[a] = -1;
+			}
+			currentQuestionNum = 0;
+			startQuiz();
 		}
 
 		function startQuiz()
 		//begins quiz
 		{
-			document.getElementById("loginForm").style.display = "none";
-			document.getElementById("quizContainer").style.display = "";
 			loadQuestion();
+			document.getElementById("quiz").style.display = "";
 		}
 
 		function getJsonText()
@@ -151,16 +176,10 @@
 				}
 				});
 			//imports questions from json file
-			var jsonObject = importQuestions();
-			questions = jsonObject.theQuestions;
-			//initialize answers array
-			answers = new Array();
-			for (var i = 0; i < questions.length; i++)
-			{
-				answers[i] = -1;
-			}
-			currentQuestionNum = 0;
+			quizzes = importQuestions();
+
 			//attempt to load cookie
+			/*
 			currentUser = $.cookie("userName");
 			if (currentUser != undefined)
 			{
@@ -176,7 +195,7 @@
 				}
 				document.getElementById("userInfo").innerHTML = ("Welcome back " + currentUser);
 				startQuiz();
-			}
+			}*/
 		}
 	</script>
 </head>
@@ -195,6 +214,8 @@
 				<!--Placeholder for quiz info (user, timer, etc...)-->
 			</div>
 			<nav>
+				<p onclick="loadQuiz(0)">Quiz 1</p>
+				<p onclick="loadQuiz(1)">Quiz 2</p>
 				<!--Placeholder for multiple quiz options-->
 			</nav>
 			<form id="quiz">
