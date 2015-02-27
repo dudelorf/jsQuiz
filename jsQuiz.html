@@ -77,7 +77,8 @@
 		function saveAndQuit_onclick()
 		{
 			$.cookie("userName", currentUser, { expires: 7 });
-			$.cookie("answers", answers, { expires: 7 });
+			var jsonAnswers = JSON.stringify(answers);
+			$.cookie("answers", jsonAnswers, { expires: 7 });
 		}
 
 		function processAnswer()
@@ -133,7 +134,7 @@
 
 		function loadQuiz(quizNum)
 		{
-			document.getElementById("greeting").style.display = "none";
+			document.getElementById("instructions").style.display = "none";
 			var quizStr = "quiz" + quizNum;
 			currentQuiz = quizzes[quizStr];
 			currentQuiz.quizID = quizStr;
@@ -183,37 +184,32 @@
 				});
 			//imports questions from json file
 			quizzes = importQuestions();
-			//builds answers arrays
-			var numQuizzes = Object.keys(quizzes).length;
-			for (var arr = 0; arr < numQuizzes; arr++)
-			{
-				var quizStr = "quiz" + arr;
-				var arrLen = quizzes[quizStr].length;
-				var ansArr = new Array();
-				for (var c = 0; c < arrLen; c++)
-				{
-					ansArr[c] = -1;
-				}
-				answers[quizStr] = ansArr;
-			}
+
 			//attempt to load cookie
-			/*
 			currentUser = $.cookie("userName");
 			if (currentUser != undefined)
 			{
 				//loads answers
-				answers = $.cookie("answers").split(",");
-				for(var a = 0; a < answers.length; a++)
-				{
-					if (answers[a] == -1)
-					{
-						currentQuestionNum = (a);
-						break;
-					}
-				}
+				answers = JSON.parse($.cookie("answers"));
 				document.getElementById("userInfo").innerHTML = ("Welcome back " + currentUser);
-				startQuiz();
-			}*/
+				openQuiz();
+			}
+			else
+			{
+				//builds new answers arrays
+				var numQuizzes = Object.keys(quizzes).length;
+				for (var arr = 0; arr < numQuizzes; arr++)
+				{
+					var quizStr = "quiz" + arr;
+					var arrLen = quizzes[quizStr].length;
+					var ansArr = new Array();
+					for (var c = 0; c < arrLen; c++)
+					{
+						ansArr[c] = -1;
+					}
+					answers[quizStr] = ansArr;
+				}
+			}
 		}
 	</script>
 </head>
@@ -236,7 +232,7 @@
 				<p onclick="loadQuiz(1)">Quiz 2</p>
 				<!--Placeholder for multiple quiz options-->
 			</nav>
-			<p id="greeting">Please pick a quiz to begin</p>
+			<p id="instructions">Please pick a quiz to begin</p>
 			<form id="quiz">
 				<label id="theQuestion" class="quizText">The Question</label><br />
 				<input type="radio" name="answerChoice" value="0" id="c0b"/><label id="c0" class="quizText"></label><br />
