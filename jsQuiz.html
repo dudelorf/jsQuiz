@@ -8,10 +8,10 @@
 	<script type="text/JavaScript">
 		//object containing multiple quizzes
 		var quizzes;
-		//array of questions for current quiz
-		var questions;
-		//array of answers
-		var answers;
+		//current quiz information
+		var currentQuiz;
+		//arrays of answers for individual quizzes
+		var answers = {};
 		//index of currently displayed question
 		var currentQuestionNum;
 		//correct answer for current question
@@ -21,16 +21,16 @@
 
 		function loadQuestion()
 		{
-			var newQuestion = questions[currentQuestionNum];
+			var newQuestion = currentQuiz[currentQuestionNum];
 			theCorrectAnswer = newQuestion.correctAnswer;
 			document.getElementById("theQuestion").innerHTML = newQuestion.question;
 			document.getElementById("c0").innerHTML = newQuestion.choices[0];
 			document.getElementById("c1").innerHTML = newQuestion.choices[1];
 			document.getElementById("c2").innerHTML = newQuestion.choices[2];
 			document.getElementById("c3").innerHTML = newQuestion.choices[3];
-			if(answers[currentQuestionNum] != -1)
+			if(currentQuiz["answers"][currentQuestionNum] != -1)
 			{
-				var oldChoiceStr = ("c" + answers[currentQuestionNum] + "b");
+				var oldChoiceStr = ("c" + currentQuiz["answers"][currentQuestionNum] + "b");
 				document.getElementById(oldChoiceStr).checked = true;
 			}
 			else
@@ -43,11 +43,10 @@
 		{
 			processAnswer(); 
 			currentQuestionNum++;
-			if (currentQuestionNum == questions.length)
+			if (currentQuestionNum == currentQuiz.length)
 			{
 				currentQuestionNum--;
 				finishQuiz();
-				return;
 			}
 			else
 			{
@@ -85,10 +84,11 @@
 		{
 			var answerOptions = document.getElementById("quiz");
 			for (var c = 0; c < 4; c++)
+				//4 because there are 4 possible answers for each question
 			{
 				if (answerOptions[c].checked)
 				{
-					answers[currentQuestionNum] = answerOptions[c].value;
+					currentQuiz["answers"][currentQuestionNum] = answerOptions[c].value;
 					return;
 				}
 			}
@@ -97,9 +97,9 @@
 		function finishQuiz()
 		{
 			var score = 0;
-			for (var q = 0; q < questions.length; q++)
+			for (var q = 0; q < currentQuiz.length; q++)
 			{
-				if (questions[q].correctAnswer == answers[q])
+				if (currentQuiz[q].correctAnswer == currentQuiz["answers"][q])
 				{
 					score++;
 				}
@@ -133,17 +133,23 @@
 
 		function loadQuiz(quizNum)
 		{
+			document.getElementById("greeting").style.display = "none";
 			var quizStr = "quiz" + quizNum;
-			questions = quizzes[quizStr];
-			//load array
-			//if array exists load it, otherwise create new array
-			answers = new Array();
-			for (var a = 0; a < questions.length; a++)
+			currentQuiz = quizzes[quizStr];
+			currentQuiz.quizID = quizStr;
+			currentQuiz.answers = answers[quizStr];
+			//check for completed quiz
+			if (false)
+			{}
+			//check for partial completion
+			else if (false)
+			{}
+			//new quiz
+			else
 			{
-				answers[a] = -1;
+				currentQuestionNum = 0;
+				startQuiz();
 			}
-			currentQuestionNum = 0;
-			startQuiz();
 		}
 
 		function startQuiz()
@@ -177,7 +183,19 @@
 				});
 			//imports questions from json file
 			quizzes = importQuestions();
-
+			//builds answers arrays
+			var numQuizzes = Object.keys(quizzes).length;
+			for (var arr = 0; arr < numQuizzes; arr++)
+			{
+				var quizStr = "quiz" + arr;
+				var arrLen = quizzes[quizStr].length;
+				var ansArr = new Array();
+				for (var c = 0; c < arrLen; c++)
+				{
+					ansArr[c] = -1;
+				}
+				answers[quizStr] = ansArr;
+			}
 			//attempt to load cookie
 			/*
 			currentUser = $.cookie("userName");
@@ -218,6 +236,7 @@
 				<p onclick="loadQuiz(1)">Quiz 2</p>
 				<!--Placeholder for multiple quiz options-->
 			</nav>
+			<p id="greeting">Please pick a quiz to begin</p>
 			<form id="quiz">
 				<label id="theQuestion" class="quizText">The Question</label><br />
 				<input type="radio" name="answerChoice" value="0" id="c0b"/><label id="c0" class="quizText"></label><br />
