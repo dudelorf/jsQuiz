@@ -2,5 +2,24 @@
 {
 	border: 5px ridge;
 	display: inline-block;
-	
+	width:250px;
+	height:150px;
+	font-family:arial;
+}
+#loginForm p
+{
+	margin-left: 10px;
+}
+#loginForm label
+{
+	margin-left: 10px;
+}
+#userNameInput
+{
+	width:100px;
+	margin-bottom: 10px;
+}
+#userSubmit
+{
+	margin-left: 10px;
 }
