@@ -105,7 +105,12 @@
 					score++;
 				}
 			}
-			alert("Your score is " + score);
+			//close quiz
+			document.getElementById("quiz").style.display = "none";
+			var infoDisplay = document.getElementById("instructions");
+			infoDisplay.style.display = "";
+			infoDisplay.innerHTML = "Your score is: " + score + "<br />Please select a new quiz.";
+
 		}
 		function newUserQuiz()
 		//initializes a new user and begins quiz
@@ -141,10 +146,9 @@
 			currentQuiz.answers = answers[quizStr];
 			//check for completed quiz
 			if (false)
-			{}
-			//check for partial completion
-			else if (false)
-			{}
+			{
+
+			}
 			//new quiz
 			else
 			{
